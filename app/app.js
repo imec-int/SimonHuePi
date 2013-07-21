@@ -62,6 +62,8 @@ io.set('log level', 0);
 
 app.get('/', function (req, res){
 	res.render('index', { title: 'Hello World' });
+
+	resetGame();
 });
 
 app.post('/simon', function (req, res){
@@ -97,9 +99,12 @@ function initLights(){
 	lights.turnOnLight(config.colors.pink.lightid);
 
 	// set lights to right color
-	lights.setLight(config.colors.blue.lightid, config.colors.blue.hue, config.colors.blue.sat, null);
-	lights.setLight(config.colors.orange.lightid, config.colors.orange.hue, config.colors.orange.sat, null);
-	lights.setLight(config.colors.pink.lightid, config.colors.pink.hue, config.colors.pink.sat, null);
+	setTimeout(function(){
+		lights.setLight(config.colors.blue.lightid, config.colors.blue.hue, config.colors.blue.sat, null);
+		lights.setLight(config.colors.orange.lightid, config.colors.orange.hue, config.colors.orange.sat, null);
+		lights.setLight(config.colors.pink.lightid, config.colors.pink.hue, config.colors.pink.sat, null);
+	},2000);
+
 }
 
 function input(inp){
@@ -139,8 +144,13 @@ function input(inp){
 		// BUZZER
 		console.log("Fail");
 
+		lights.deathAnimation(config.colors.blue.lightid);
+		lights.deathAnimation(config.colors.orange.lightid);
+		lights.deathAnimation(config.colors.pink.lightid);
+
 		// PLAY SOUND
 		io.sockets.emit( 'playsound', 'fail' );
+
 
 		resetGame();
 	}

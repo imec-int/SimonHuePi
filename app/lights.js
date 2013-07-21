@@ -290,6 +290,7 @@ function deathAnimation(lightid, callback){
 
 }
 
+
 exports.startlooping  = startlooping;
 exports.stoplooping = stoplooping;
 exports.setLight = setLight;
