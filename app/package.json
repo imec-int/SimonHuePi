@@ -10,6 +10,7 @@
     "jade": "~0.28.1",
     "async": "~0.2.9",
     "node-hue-api": "*",
-    "onoff": "*"
+    "onoff": "*",
+    "socket.io": "~0.9.16"
   }
 }

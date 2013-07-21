@@ -5,6 +5,7 @@ var http = require('http')
 var path = require('path');
 var util = require('util');
 var fs = require('fs');
+var socketio = require('socket.io');
 
 var config = require('./config');
 var lights = require('./lights');
@@ -50,9 +51,14 @@ app.configure('development', function(){
 	app.use(express.errorHandler());
 });
 
-http.createServer(app).listen(app.get('port'), function(){
+// Webserver:
+var server = http.createServer(app).listen(app.get('port'), function(){
 	console.log("Express server listening on port " + app.get('port'));
 });
+
+// Socket IO
+var io = socketio.listen(server);
+io.set('log level', 0);
 
 app.get('/', function (req, res){
 	res.render('index', { title: 'Hello World' });
@@ -99,6 +105,7 @@ function input(inp){
 	console.log("Input: "+inp+"  | inputNr: "+ currentNumberOfInputs + " | "+currentSequence.length);
 
 	// PLAY SOUND
+	io.sockets.emit( 'playsound', inp );
 
 	// COLOR HUE
 	lights.burstLight(config.colors[inp].lightid);
