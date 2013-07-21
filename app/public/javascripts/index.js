@@ -2,18 +2,23 @@ App = {
 	sounds:{
 		blue: {
 			audioEl: null,
-			src: '/sounds/breakfree.mp3',
-			colorcode: '#1535d7'
+			src: '/sounds/blue.mp3'
 		},
 		orange: {
 			audioEl: null,
-			src: '/sounds/proudmary.mp3',
-			colorcode: '#98c83e'
+			src: '/sounds/orange.mp3'
 		},
 		pink: {
 			audioEl: null,
-			src: '/sounds/bumbalu.mp3',
-			colorcode: '#ffa500'
+			src: '/sounds/pink.mp3'
+		},
+		start: {
+			audioEl: null,
+			src: '/sounds/start.mp3'
+		},
+		fail: {
+			audioEl: null,
+			src: '/sounds/fail.mp3'
 		}
 	},
 
@@ -74,7 +79,8 @@ App = {
 	},
 
 	playsound: function(button){
-		console.log(button);
+		console.log("playing sound: "+  button);
+		console.log(App.sounds[button]);
 		App.sounds[button].audioEl.currentTime = 0;
 		App.sounds[button].audioEl.play();
 	}

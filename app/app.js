@@ -104,14 +104,17 @@ function input(inp){
 
 	console.log("Input: "+inp+"  | inputNr: "+ currentNumberOfInputs + " | "+currentSequence.length);
 
-	// PLAY SOUND
-	io.sockets.emit( 'playsound', inp );
+
 
 	// COLOR HUE
 	lights.burstLight(config.colors[inp].lightid);
 
 	// validate input (new sequence or correctly matched sequence)
 	if(isNewInput(inp)){
+
+		// PLAY SOUND
+		io.sockets.emit( 'playsound', inp );
+
 		console.log("new input");
 		// add new input to current sequence
 		currentSequence.push(inp);
@@ -119,6 +122,10 @@ function input(inp){
 		//Go to next player
 		nextPlayer();
 	}else if(isCorrectlyMatchedInput(inp)){
+
+		// PLAY SOUND
+		io.sockets.emit( 'playsound', inp );
+
 		console.log("correct match");
 		currentSequenceIndex++;
 		timerInterval = setTimeout(timerStopped, timeToPush);
@@ -126,6 +133,11 @@ function input(inp){
 		// FALSE INPUT
 		// BUZZER
 		console.log("Fail");
+
+		// PLAY SOUND
+		io.sockets.emit( 'playsound', 'fail' );
+
+		resetGame();
 	}
 
 }
