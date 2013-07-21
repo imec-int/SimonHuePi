@@ -5,9 +5,7 @@
     "start": "node app"
   },
   "dependencies": {
-    "onoff": "*"
+    "onoff": "*",
+    "node-hue-api": "~0.2.0"
   }
 }
-
-
-

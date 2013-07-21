@@ -1,6 +1,14 @@
 #!/usr/bin/env node
 var fs = require('fs');
+var lights = require('./lights');
 var onoff, Gpio, led, blue, pink, orange;
+
+var lightids = [1,2,3];
+var buttons2lights = {
+	blue  : {id: 1, hue: 37683, sat: 252, bri: 173},
+	pink  : {id: 2, hue: 56615, sat: 204, bri: 168},
+	orange: {id: 3, hue: 5825 , sat: 224, bri: 247}
+}
 
 
 function watchGpio(){
@@ -52,6 +60,14 @@ function blink(){
 
 function input(button){
 	console.log(button);
+
+	var light = buttons2lights[button];
+
+	lights.burstLight(light.id, {
+		hue: light.hue,
+		sat: light.sat,
+		bri: light.bri
+	});
 }
 
 function printStatus(){
@@ -71,5 +87,10 @@ fs.exists('/sys/class/gpio/', function (exists){
 		console.log("Looks like we're not on the Raspberry Pi.");
 	}
 });
+
+// turn on all lights
+for (i in lightids){
+	lights.turnOnLight(lightids[i]);
+}
 
 
