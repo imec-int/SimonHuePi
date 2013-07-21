@@ -28,15 +28,15 @@ function watchGpio(){
 
 	blue.watch(function (err, value) {
 		if (err) return console.log(err);
-		if (value == 0) buttonWasPressed('blue'); // 0 = pressed down
+		if (value == 0) input('blue'); // 0 = pressed down
 	});
 	pink.watch(function (err, value) {
 		if (err) return console.log(err);
-		if (value == 0) buttonWasPressed('pink'); // 0 = pressed down
+		if (value == 0) input('pink'); // 0 = pressed down
 	});
 	orange.watch(function (err, value) {
 		if (err) return console.log(err);
-		if (value == 0) buttonWasPressed('orange'); // 0 = pressed down
+		if (value == 0) input('orange'); // 0 = pressed down
 	});
 
 	blink();
@@ -50,7 +50,7 @@ function blink(){
 	},300);
 }
 
-function buttonWasPressed(button){
+function input(button){
 	console.log(button);
 }
 
