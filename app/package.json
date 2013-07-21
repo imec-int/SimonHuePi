@@ -9,6 +9,7 @@
     "stylus": "*",
     "jade": "~0.28.1",
     "async": "~0.2.9",
-    "node-hue-api": "*"
+    "node-hue-api": "*",
+    "onoff": "*"
   }
 }
