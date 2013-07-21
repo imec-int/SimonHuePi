@@ -6,6 +6,7 @@ var path = require('path');
 var util = require('util');
 
 var config = require('./config');
+var lights = require('./lights');
 
 // *************************
 // *** In Game Variables ***
@@ -18,6 +19,8 @@ var currentNumberOfInputs = 0;
 var timerInterval = 0;
 var players = [0,1,2];
 var currentPlayer = 0;
+var currentPlayerIndex = 0;
+var timeToPush = 5000; // 2.5sec
 
 // ******************
 // *** WEB SERVER ***
@@ -52,25 +55,58 @@ app.get('/', function (req, res){
 	res.render('index', { title: 'Hello World' });
 });
 
+app.post('/simon', function (req, res){
+	// responsd immediatly:
+	res.json('thx');
+	console.log(req.body);
+	input(req.body.input);
+});
+
+resetGame();
+
 
 function resetGame(){
+	console.log("reset game");
 	currentSequence = [];
 	currentSequenceIndex = 0;
-	currentPlayer = players[0];
+	currentPlayerIndex = 0;
+	currentPlayer = players[currentPlayerIndex];
 	currentNumberOfInputs = 0;
+	clearTimeout(timerInterval);
+	initLights();
+}
 
+function initLights(){
+	// set lights to right color
+	lights.setLight(config.colors.blue.lightid, config.colors.blue.hue, config.colors.blue.sat, null);
+	lights.setLight(config.colors.orange.lightid, config.colors.orange.hue, config.colors.orange.sat, null);
+	lights.setLight(config.colors.pink.lightid, config.colors.pink.hue, config.colors.pink.sat, null);
 }
 
 function input(inp){
-	//
+	// inp is [blue, orange or pink]
 	currentNumberOfInputs++;
+	clearTimeout(timerInterval);
+
+	console.log("Input: "+inp+"  | inputNr: "+ currentNumberOfInputs + " | "+currentSequence.length);
+
+	// PLAY SOUND
+
+	// COLOR HUE
+	lights.burstLight(config.colors[inp].lightid);
+
 	// validate input (new sequence or correctly matched sequence)
-
-	// new
 	if(isNewInput(inp)){
-
+		console.log("new input");
+		// add new input to current sequence
+		currentSequence.push(inp);
+		console.log(currentSequence);
+		//Go to next player
+		nextPlayer();
 	}else if(isCorrectlyMatchedInput(inp)){
-
+		console.log("correct match");
+		currentSequenceIndex++;
+		timerInterval = setTimeout(timerStopped, timeToPush);
 	}else{
 		// FALSE INPUT
 		// BUZZER
@@ -80,7 +116,7 @@ function input(inp){
 }
 
 function isNewInput(input){
-	if(	currentNumberOfInputs = currentSequence.length +1)
+	if(	currentNumberOfInputs == currentSequence.length +1)
 			return true;
 	return false;
 }
@@ -92,6 +128,16 @@ function isCorrectlyMatchedInput(input){
 }
 
 function nextPlayer(){
-
+	// reset timer
+	timerInterval = setTimeout(timerStopped, timeToPush);
+	currentSequenceIndex = 0;
+	currentNumberOfInputs = 0;
 }
 
+function timerStopped(){
+	// FALSE INPUT
+	// BUZZER
+
+
+	resetGame();
+}
