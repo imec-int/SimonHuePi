@@ -83,6 +83,11 @@ function resetGame(){
 	currentNumberOfInputs = 0;
 	clearTimeout(timerInterval);
 	initLights();
+
+	setTimeout(function(){
+		// PLAY SOUND
+		io.sockets.emit( 'playsound', 'start' );
+	},3000);
 }
 
 function initLights(){

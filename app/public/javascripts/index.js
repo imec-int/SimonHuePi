@@ -14,7 +14,7 @@ App = {
 		},
 		start: {
 			audioEl: null,
-			src: '/sounds/start.mp3'
+			src: '/sounds/start.m4a'
 		},
 		fail: {
 			audioEl: null,
@@ -75,6 +75,11 @@ App = {
 
 		App.initSocket();
 		App.initSounds();
+
+		setTimeout(function(){
+			App.playsound('start');
+		},3000);
+
 
 	},
 
