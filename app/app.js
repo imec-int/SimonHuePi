@@ -7,6 +7,18 @@ var util = require('util');
 
 var config = require('./config');
 
+// *************************
+// *** In Game Variables ***
+// *************************
+
+var colorMap = {blue:0, orange:1, pink:2};
+var currentSequence = [];
+var currentSequenceIndex = 0;
+var currentNumberOfInputs = 0;
+var timerInterval = 0;
+var players = [0,1,2];
+var currentPlayer = 0;
+
 // ******************
 // *** WEB SERVER ***
 // ******************
@@ -41,6 +53,45 @@ app.get('/', function (req, res){
 });
 
 
+function resetGame(){
+	currentSequence = [];
+	currentSequenceIndex = 0;
+	currentPlayer = players[0];
+	currentNumberOfInputs = 0;
 
+}
 
+function input(inp){
+	//
+	currentNumberOfInputs++;
+	// validate input (new sequence or correctly matched sequence)
+
+	// new
+	if(isNewInput(inp)){
+
+	}else if(isCorrectlyMatchedInput(inp)){
+
+	}else{
+		// FALSE INPUT
+		// BUZZER
+		console.log("Fail");
+	}
+
+}
+
+function isNewInput(input){
+	if(	currentNumberOfInputs = currentSequence.length +1)
+			return true;
+	return false;
+}
+
+function isCorrectlyMatchedInput(input){
+	if(	input == currentSequence[currentSequenceIndex])
+			return true;
+	return false;
+}
+
+function nextPlayer(){
+
+}
 
