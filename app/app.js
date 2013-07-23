@@ -24,7 +24,7 @@ var timerInterval = 0;
 var players = [0,1,2];
 var currentPlayer = 0;
 var currentPlayerIndex = 0;
-var timeToPush = 5000; // 2.5sec
+var timeToPush = 7000; // 2.5sec
 
 // ******************
 // *** WEB SERVER ***
@@ -83,13 +83,13 @@ function resetGame(){
 	currentPlayerIndex = 0;
 	currentPlayer = players[currentPlayerIndex];
 	currentNumberOfInputs = 0;
-	clearTimeout(timerInterval);
+	// clearTimeout(timerInterval);
 	initLights();
 
 	setTimeout(function(){
 		// PLAY SOUND
 		io.sockets.emit( 'playsound', 'start' );
-	},3000);
+	},3500);
 }
 
 function initLights(){
@@ -100,20 +100,22 @@ function initLights(){
 
 	// set lights to right color
 	setTimeout(function(){
-		lights.setLight(config.colors.blue.lightid, config.colors.blue.hue, config.colors.blue.sat, null);
-		lights.setLight(config.colors.orange.lightid, config.colors.orange.hue, config.colors.orange.sat, null);
-		lights.setLight(config.colors.pink.lightid, config.colors.pink.hue, config.colors.pink.sat, null);
-	},2000);
+		lights.resetLights(config.colors.blue.lightid, config.colors.blue.hue, config.colors.blue.sat, null);
+		lights.resetLights(config.colors.orange.lightid, config.colors.orange.hue, config.colors.orange.sat, null);
+		lights.resetLights(config.colors.pink.lightid, config.colors.pink.hue, config.colors.pink.sat, null);
+	},500);
 
 }
 
 function input(inp){
 	// inp is [blue, orange or pink]
 	currentNumberOfInputs++;
-	clearTimeout(timerInterval);
+	// clearTimeout(timerInterval);
 
 	console.log("Input: "+inp+"  | inputNr: "+ currentNumberOfInputs + " | "+currentSequence.length);
 
+	// PLAY SOUND
+	io.sockets.emit( 'playsound', inp );
 
 
 	// COLOR HUE
@@ -121,10 +123,6 @@ function input(inp){
 
 	// validate input (new sequence or correctly matched sequence)
 	if(isNewInput(inp)){
-
-		// PLAY SOUND
-		io.sockets.emit( 'playsound', inp );
-
 		console.log("new input");
 		// add new input to current sequence
 		currentSequence.push(inp);
@@ -132,27 +130,26 @@ function input(inp){
 		//Go to next player
 		nextPlayer();
 	}else if(isCorrectlyMatchedInput(inp)){
-
-		// PLAY SOUND
-		io.sockets.emit( 'playsound', inp );
-
 		console.log("correct match");
 		currentSequenceIndex++;
-		timerInterval = setTimeout(timerStopped, timeToPush);
+		// timerInterval = setTimeout(timerStopped, timeToPush);
 	}else{
 		// FALSE INPUT
 		// BUZZER
 		console.log("Fail");
 
-		lights.deathAnimation(config.colors.blue.lightid);
-		lights.deathAnimation(config.colors.orange.lightid);
-		lights.deathAnimation(config.colors.pink.lightid);
+		setTimeout(function(){
+			lights.deathAnimation(config.colors.blue.lightid);
+			lights.deathAnimation(config.colors.orange.lightid);
+			lights.deathAnimation(config.colors.pink.lightid);
 
-		// PLAY SOUND
-		io.sockets.emit( 'playsound', 'fail' );
+			// PLAY SOUND
+			io.sockets.emit( 'playsound', 'fail' );
 
-
-		resetGame();
+			setTimeout(function(){
+				resetGame();
+			},1000);
+		},1000);
 	}
 
 }
@@ -171,7 +168,7 @@ function isCorrectlyMatchedInput(input){
 
 function nextPlayer(){
 	// reset timer
-	timerInterval = setTimeout(timerStopped, timeToPush);
+	// timerInterval = setTimeout(timerStopped, timeToPush);
 	currentSequenceIndex = 0;
 	currentNumberOfInputs = 0;
 }

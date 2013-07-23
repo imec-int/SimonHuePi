@@ -5,12 +5,12 @@ var hue = require("node-hue-api"),
 	HueApi = hue.HueApi,
 	lightState = hue.lightState;
 
-var hostname = "10.0.1.2";
+var hostname = "10.100.11.122";
 var username = "robbywauters"; // username
 
 var api = new HueApi(hostname, username);
 
-// hue.createUser(hostname,  "crockysam", "mixers bzflag interface", function (err, user) {
+// hue.createUser(hostname, "robbywauters", "mixers bzflag interface", function (err, user) {
 // 	if (err) throw err;
 // 	console.log(user);
 // });
@@ -194,99 +194,29 @@ function setLight(lightid, hue, sat, callback){
 	});
 }
 
+function resetLights(lightid, hue, sat, callback){
+	api.setLightState(lightid, {
+		bri: 1,
+		hue: hue,
+		sat: sat,
+		transitiontime: 0
+	}, function (err, lights) {
+		if (err) console.log(err);
+	});
+
+}
+
 
 function deathAnimation(lightid, callback){
 
-	function on(){
-		api.setLightState(lightid, {
-			bri: 255,
-			hue: 65535,
-			sat: 255,
-			transitiontime: 0
-		}, function (err, lights) {
-			if (err) console.log(err);
-		});
-	}
-
-	function off(){
-		api.setLightState(lightid, {
-			bri: 0,
-			transitiontime: 0
-		}, function (err, lights) {
-			if (err) console.log(err);
-		});
-	}
-
-	var count = 0;
-	var isOn = false;
-	async.whilst(
-	    function () { return count < 5; },
-	    function (callback) {
-	    	if(isOn){
-	    		off();
-	    		isOn = false;
-	    	}else{
-	    		on();
-	    		isOn = true;
-	    	}
-
-	        count++;
-	        setTimeout(callback, 50);
-	    },
-	    function (err) {
-	        if(callback) callback(err);
-	    }
-	);
-
-	// async = suckt
-	// api.setLightState(lightid, {
-	// 	bri: 255,
-	// 	hue: 65535,
-	// 	sat: 255,
-	// 	transitiontime: 0
-	// }, function (err, lights) {
-	// 	if (err) return console.log(err);
-
-
-	// 	api.setLightState(lightid, {
-	// 		bri: 0,
-	// 		transitiontime: 0
-	// 	}, function (err, lights) {
-	// 		if (err) return console.log(err);
-	// 		api.setLightState(lightid, {
-	// 			bri: 255,
-	// 			hue: 65535,
-	// 			sat: 255,
-	// 			transitiontime: 0
-	// 		}, function (err, lights) {
-	// 			if (err) return console.log(err);
-
-
-	// 			api.setLightState(lightid, {
-	// 				bri: 0,
-	// 				transitiontime: 0
-	// 			}, function (err, lights) {
-	// 				if (err) return console.log(err);
-	// 				api.setLightState(lightid, {
-	// 					bri: 255,
-	// 					hue: 65535,
-	// 					sat: 255,
-	// 					transitiontime: 0
-	// 				}, function (err, lights) {
-	// 					if (err) return console.log(err);
-
-
-	// 					api.setLightState(lightid, {
-	// 						bri: 0,
-	// 						transitiontime: 0
-	// 					}, function (err, lights) {
-	// 						if (err) return console.log(err);
-	// 					});
-	// 				});
-	// 			});
-	// 		});
-	// 	});
-	// });
+	api.setLightState(lightid, {
+		bri: 255,
+		hue: 65535,
+		sat: 255,
+		transitiontime: 0
+	}, function (err, lights) {
+		if (err) console.log(err);
+	});
 
 }
 
@@ -294,6 +224,7 @@ function deathAnimation(lightid, callback){
 exports.startlooping  = startlooping;
 exports.stoplooping = stoplooping;
 exports.setLight = setLight;
+exports.resetLights = resetLights;
 exports.burstLight = burstLight;
 exports.beamOfLight = beamOfLight;
 exports.turnOffLight = turnOffLight;
