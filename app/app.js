@@ -26,6 +26,8 @@ var currentPlayer = 0;
 var currentPlayerIndex = 0;
 var timeToPush = 7000; // 2.5sec
 
+var turnOffTimer = null;
+
 // ******************
 // *** WEB SERVER ***
 // ******************
@@ -108,6 +110,17 @@ function initLights(){
 }
 
 function input(inp){
+	if(turnOffTimer)
+		window.clearTimeout(turnOffTimer);
+
+	turnOffTimer = setTimeout(function(){
+		lights.turnOnLight(config.colors.blue.lightid);
+		lights.turnOnLight(config.colors.orange.lightid);
+		lights.turnOnLight(config.colors.pink.lightid);
+	},10*60*1000); //turn off lights after 10 minutes of not used
+
+
+
 	// inp is [blue, orange or pink]
 	currentNumberOfInputs++;
 	// clearTimeout(timerInterval);
