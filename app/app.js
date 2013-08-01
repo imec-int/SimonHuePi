@@ -111,7 +111,7 @@ function initLights(){
 
 function input(inp){
 	if(turnOffTimer)
-		window.clearTimeout(turnOffTimer);
+		clearTimeout(turnOffTimer);
 
 	turnOffTimer = setTimeout(function(){
 		lights.turnOnLight(config.colors.blue.lightid);
