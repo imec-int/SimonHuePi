@@ -114,10 +114,10 @@ function input(inp){
 		clearTimeout(turnOffTimer);
 
 	turnOffTimer = setTimeout(function(){
-		lights.turnOnLight(config.colors.blue.lightid);
-		lights.turnOnLight(config.colors.orange.lightid);
-		lights.turnOnLight(config.colors.pink.lightid);
-	},10*60*1000); //turn off lights after 10 minutes of not used
+		lights.turnOffLight(config.colors.blue.lightid);
+		lights.turnOffLight(config.colors.orange.lightid);
+		lights.turnOffLight(config.colors.pink.lightid);
+	},3*60*1000); //turn off lights after 3 minutes of not used
 
 
 
